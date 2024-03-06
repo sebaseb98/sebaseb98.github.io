@@ -50,7 +50,7 @@
             text-decoration: none;
         }
 
-        #container {
+        #imageContainer {
             width: 400px;
             height: 400px;
             border: 2px solid #000;
@@ -127,16 +127,15 @@
                 ondragstart="drag(event)"></div>
         </div>
 
-        <div id="container" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+        <div id="imageContainer" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
 
-        <button id="clearButton" onclick="clearContainer()">Clear Container</button>
+        <button id="clearButton" onclick="clearContainer('imageContainer')">Clear Container</button>
         <button id="exportButton" onclick="getRadonTransform()">Get Radon Transform</button>
 
 
         <h2>Radon Transform</h2>
         <div id="radonContainer"></div>
-        <button id="clearButton" onclick="clearContainer()">Clear Container</button>
-        <button onclick="sayHello()">Say Hello</button>
+        <button id="clearButton" onclick="clearContainer('radonContainer')">Clear Container</button>
         <footer>
             Created by <a href="https://github.com/sebaseb98" target="_blank">sebaseb98</a> &copy; 2024
         </footer>

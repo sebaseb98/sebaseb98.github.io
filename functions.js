@@ -18,8 +18,8 @@ function drop(event) {
     event.target.appendChild(shape);
 }
 
-function clearContainer() {
-    var container = document.getElementById("container");
+function clearContainer(container) {
+    var container = document.getElementById(container);
     while (container.firstChild) {
         container.removeChild(container.firstChild);
     }
