@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Radon Transform Playground</title>
+    <script src="/functions.js"></script>
+    <script src="script.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -65,6 +67,14 @@
 
         }
 
+        #radonContainer {
+            width: 400px;
+            height: 400px;
+            border: 2px solid #000;
+            position: relative;
+            margin: 20px auto;
+        }
+
         .shape {
             width: 50px;
             height: 50px;
@@ -118,69 +128,22 @@
         </div>
 
         <div id="container" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
-        
+
         <button id="clearButton" onclick="clearContainer()">Clear Container</button>
-        
-        
+        <button id="exportButton" onclick="getRadonTransform()">Get Radon Transform</button>
+
+
+        <h2>Radon Transform</h2>
+        <div id="radonContainer"></div>
+        <button id="clearButton" onclick="clearContainer()">Clear Container</button>
+        <button onclick="sayHello()">Say Hello</button>
         <footer>
             Created by <a href="https://github.com/sebaseb98" target="_blank">sebaseb98</a> &copy; 2024
         </footer>
     </div>
-    <script>
-        function allowDrop(event) {
-            event.preventDefault();
-        }
-
-        function drag(event) {
-            event.dataTransfer.setData("text", event.target.id);
-        }
-
-        function drop(event) {
-            event.preventDefault();
-            var data = event.dataTransfer.getData("text");
-            var offsetX = 25;
-            var offsetY = 25;
-            var shape = document.getElementById(data).cloneNode(true);
-            shape.style.position = "absolute";
-            shape.style.left = (event.clientX - offsetX - event.target.getBoundingClientRect().left) + "px";
-            shape.style.top = (event.clientY - offsetY - event.target.getBoundingClientRect().top) + "px";
-            event.target.appendChild(shape);
-        }
-
-        function clearContainer() {
-            var container = document.getElementById("container");
-            while (container.firstChild) {
-                container.removeChild(container.firstChild);
-            }
-        }
-
-        function exportAsGrayscale() {
-            var container = document.getElementById("container");
-            var canvas = document.createElement('canvas');
-            canvas.width = container.offsetWidth;
-            canvas.height = container.offsetHeight;
-            var ctx = canvas.getContext('2d');
-
-            var shapes = container.querySelectorAll('.shape');
-            Array.from(shapes).forEach(function(shape) {
-                var rect = shape.getBoundingClientRect();
-                ctx.fillStyle = "#000";
-                ctx.fillRect(rect.left - container.getBoundingClientRect().left, rect.top - container.getBoundingClientRect().top, rect.width, rect.height);
-            });
-
-            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            var grayscaleData = [];
-
-            for (var i = 0; i < imageData.data.length; i += 4) {
-                var average = (imageData.data[i] + imageData.data[i + 1] + imageData.data[i + 2]) / 3;
-                grayscaleData.push(average);
-            }
-
-            console.log(grayscaleData);
-        }
 
 
-    </script>
+    
 </body>
 
 </html>
