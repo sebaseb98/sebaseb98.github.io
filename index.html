@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +26,9 @@
             margin-bottom: 20px;
         }
 
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             color: #333;
         }
 
@@ -91,24 +94,33 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
             <h1>Radon Transform Playground</h1>
             <div class="intro">
-                <p>The Radon transform is a mathematical transformation used in tomography to reconstruct an image from its
+                <p>The Radon transform is a mathematical transformation used in tomography to reconstruct an image from
+                    its
                     projections.</p>
-                <p>On this page, we want to make the Radon transform a bit more intuitive and give a little playground that helps understanding this complex operation.</p>
+                <p>On this page, we want to make the Radon transform a bit more intuitive and give a little playground
+                    that helps understanding this complex operation.</p>
             </div>
         </header>
-        
+
         <div id="parking">
-            <div class="shape triangle" id="triangle" style="left: 20px; top: 20px;" draggable="true" ondragstart="drag(event)"></div>
-            <div class="shape circle" id="circle" style="left: 80px; top: 20px;" draggable="true" ondragstart="drag(event)"></div>
-            <div class="shape square" id="square" style="left: 140px; top: 20px;" draggable="true" ondragstart="drag(event)"></div>
+            <div class="shape triangle" id="triangle" style="left: 20px; top: 20px;" draggable="true"
+                ondragstart="drag(event)"></div>
+            <div class="shape circle" id="circle" style="left: 80px; top: 20px;" draggable="true"
+                ondragstart="drag(event)"></div>
+            <div class="shape square" id="square" style="left: 140px; top: 20px;" draggable="true"
+                ondragstart="drag(event)"></div>
         </div>
-        
+
         <div id="container" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+        
+        <button id="clearButton" onclick="clearContainer()">Clear Container</button>
+        
         
         <footer>
             Created by <a href="https://github.com/sebaseb98" target="_blank">sebaseb98</a> &copy; 2024
@@ -126,13 +138,49 @@
         function drop(event) {
             event.preventDefault();
             var data = event.dataTransfer.getData("text");
+            var offsetX = 25;
+            var offsetY = 25;
             var shape = document.getElementById(data).cloneNode(true);
-            var offsetX = event.clientX - event.target.getBoundingClientRect().left - shape.offsetWidth / 2;
-            var offsetY = event.clientY - event.target.getBoundingClientRect().top - shape.offsetHeight / 2;
-            shape.style.left = offsetX + "px";
-            shape.style.top = offsetY + "px";
+            shape.style.position = "absolute";
+            shape.style.left = (event.clientX - offsetX - event.target.getBoundingClientRect().left) + "px";
+            shape.style.top = (event.clientY - offsetY - event.target.getBoundingClientRect().top) + "px";
             event.target.appendChild(shape);
         }
+
+        function clearContainer() {
+            var container = document.getElementById("container");
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+        }
+
+        function exportAsGrayscale() {
+            var container = document.getElementById("container");
+            var canvas = document.createElement('canvas');
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            var ctx = canvas.getContext('2d');
+
+            var shapes = container.querySelectorAll('.shape');
+            Array.from(shapes).forEach(function(shape) {
+                var rect = shape.getBoundingClientRect();
+                ctx.fillStyle = "#000";
+                ctx.fillRect(rect.left - container.getBoundingClientRect().left, rect.top - container.getBoundingClientRect().top, rect.width, rect.height);
+            });
+
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var grayscaleData = [];
+
+            for (var i = 0; i < imageData.data.length; i += 4) {
+                var average = (imageData.data[i] + imageData.data[i + 1] + imageData.data[i + 2]) / 3;
+                grayscaleData.push(average);
+            }
+
+            console.log(grayscaleData);
+        }
+
+
     </script>
 </body>
+
 </html>
