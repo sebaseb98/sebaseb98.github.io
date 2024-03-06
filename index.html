@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        Radon Transform Website
-    </title>
+    <title>Radon Transform Playground</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,9 +21,11 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        h1,
-        h2,
-        h3 {
+        .intro {
+            margin-bottom: 20px;
+        }
+
+        h1, h2, h3 {
             color: #333;
         }
 
@@ -34,33 +33,106 @@
             color: #666;
             line-height: 1.6;
         }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #999;
+        }
+
+        footer a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        #container {
+            width: 400px;
+            height: 400px;
+            border: 2px solid #000;
+            position: relative;
+            margin: 20px auto;
+        }
+
+        #parking {
+            width: 400px;
+            height: 90px;
+            border: 2px solid #000;
+            position: relative;
+            margin: 20px auto;
+
+        }
+
+        .shape {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            cursor: pointer;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 50px solid blue;
+        }
+
+        .circle {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .square {
+            width: 50px;
+            height: 50px;
+            background-color: green;
+        }
     </style>
-
 </head>
-
 <body>
     <div class="container">
         <header>
-            <h1>Radon Transform</h1>
-            <p>The Radon transform is a mathematical transformation used in tomography to reconstruct an image from its
-                projections.</p>
+            <h1>Radon Transform Playground</h1>
+            <div class="intro">
+                <p>The Radon transform is a mathematical transformation used in tomography to reconstruct an image from its
+                    projections.</p>
+                <p>On this page, we want to make the Radon transform a bit more intuitive and give a little playground that helps understanding this complex operation.</p>
+            </div>
         </header>
-        <main>
-            <p>For more information about the Radon transform, you can visit the following resources:</p>
-            <ul>
-                <li><a href="https://en.wikipedia.org/wiki/Radon_transform" target="_blank">Wikipedia - Radon
-                        Transform</a></li>
-                <li><a href="https://mathworld.wolfram.com/RadonTransform.html" target="_blank">Wolfram MathWorld -
-                        Radon Transform</a></li>
-            </ul>
-            <p>On this page, we want to make the Radon transform a bit more intuitive and give a little playground that helps understanding this complex operation.</p>
-        </main>
-
+        
+        <div id="parking">
+            <div class="shape triangle" id="triangle" style="left: 20px; top: 20px;" draggable="true" ondragstart="drag(event)"></div>
+            <div class="shape circle" id="circle" style="left: 80px; top: 20px;" draggable="true" ondragstart="drag(event)"></div>
+            <div class="shape square" id="square" style="left: 140px; top: 20px;" draggable="true" ondragstart="drag(event)"></div>
+        </div>
+        
+        <div id="container" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
         
         <footer>
-            Created by <a href="https://github.com/sebaseb98" target="_blank"> sebaseb98 </a> &copy; 2024
+            Created by <a href="https://github.com/sebaseb98" target="_blank">sebaseb98</a> &copy; 2024
         </footer>
     </div>
-</body>
+    <script>
+        function allowDrop(event) {
+            event.preventDefault();
+        }
 
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            var data = event.dataTransfer.getData("text");
+            var shape = document.getElementById(data).cloneNode(true);
+            var offsetX = event.clientX - event.target.getBoundingClientRect().left - shape.offsetWidth / 2;
+            var offsetY = event.clientY - event.target.getBoundingClientRect().top - shape.offsetHeight / 2;
+            shape.style.left = offsetX + "px";
+            shape.style.top = offsetY + "px";
+            event.target.appendChild(shape);
+        }
+    </script>
+</body>
 </html>
